@@ -3,6 +3,14 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const commentSchema = new Schema({
+  post: {
+    type: Schema.ObjectId,
+    required: true,
+  },
+  author: {
+    type: Schema.ObjectId,
+    required: true,
+  },
   content: {
     type: String,
     required: true,
@@ -10,10 +18,6 @@ const commentSchema = new Schema({
   date: {
     type: Date,
     default: Date.now,
-  },
-  author: {
-    type: Schema.ObjectId,
-    required: true,
   },
 });
 

@@ -21,10 +21,6 @@ const postSchema = new Schema({
     type: Schema.ObjectId,
     required: true,
   },
-  comments: {
-    type: Schema.ObjectId,
-    default: [],
-  },
 });
 
 module.exports = mongoose.model('Post', postSchema);
