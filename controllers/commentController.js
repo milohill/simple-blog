@@ -40,3 +40,13 @@ exports.comment_create = [
     }
   },
 ];
+
+exports.comment_delete = async (req, res, next) => {
+  const { commentId } = req.body;
+  try {
+    await Comment.findByIdAndDelete(commentId);
+    res.send('comment deleted');
+  } catch (err) {
+    next(err);
+  }
+};

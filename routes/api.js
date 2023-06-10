@@ -18,4 +18,7 @@ router.get('/comments/:postId', commentController.comment_list);
 // create a comment with a post id
 router.post('/comments/:postId/create', commentController.comment_create);
 
+// delete a comment from a post
+router.post('/comments/:postId/delete', commentController.comment_delete);
+
 module.exports = router;
