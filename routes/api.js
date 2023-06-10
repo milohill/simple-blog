@@ -6,16 +6,16 @@ const router = express.Router();
 const postController = require('../controllers/postController');
 const commentController = require('../controllers/commentController');
 
-// get every post
-router.get('/posts', postController.post_get);
+// list every post
+router.get('/posts', postController.post_list);
 
-// post a post
-router.post('/posts', postController.post_post);
+// create a post
+router.post('/posts/create', postController.post_create);
 
-// get users according to a post
-router.get('/comments/:postId', commentController.comment_get);
+// list comments according to a post
+router.get('/comments/:postId', commentController.comment_list);
 
-// post a user with a post id
-router.post('/comments/:postId', commentController.comment_post);
+// create a comment with a post id
+router.post('/comments/:postId/create', commentController.comment_create);
 
 module.exports = router;

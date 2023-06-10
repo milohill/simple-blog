@@ -4,7 +4,7 @@ const Comment = require('../models/comment');
 require('dotenv').config();
 
 // for the editor
-exports.comment_get = async (req, res, next) => {
+exports.comment_list = async (req, res, next) => {
   try {
     const comments = await Comment.find({ post: req.params.postId }).exec();
     return res.json(comments);
@@ -15,7 +15,7 @@ exports.comment_get = async (req, res, next) => {
 };
 
 // for the editor
-exports.comment_post = [
+exports.comment_create = [
   body('content').trim().isLength({ max: 50 }),
   body('guestId').trim(),
   body('guestPassword').trim(),

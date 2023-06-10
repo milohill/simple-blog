@@ -2,7 +2,7 @@ const { body, validationResult } = require('express-validator');
 const Post = require('../models/post');
 
 // for the reader
-exports.post_get = async (req, res, next) => {
+exports.post_list = async (req, res, next) => {
   try {
     const allPosts = await Post.find().exec();
     res.json(allPosts);
@@ -12,7 +12,7 @@ exports.post_get = async (req, res, next) => {
 };
 
 // for the editor
-exports.post_post = [
+exports.post_create = [
   body('title')
     .trim()
     .isLength({ max: 10 })
