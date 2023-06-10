@@ -21,4 +21,7 @@ router.post('/comments/:postId/create', commentController.comment_create);
 // delete a comment from a post
 router.post('/comments/:postId/delete', commentController.comment_delete);
 
+// update a comment in a post
+router.post('/comments/:postId/update', commentController.comment_update);
+
 module.exports = router;

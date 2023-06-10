@@ -10,7 +10,7 @@ exports.comment_list = async (req, res, next) => {
     return res.json(comments);
   } catch (err) {
     err.comment = 'Comment not found';
-    next(err);
+    return next(err);
   }
 };
 
@@ -34,9 +34,9 @@ exports.comment_create = [
         guestPassword: hashedGuestPassword,
       });
       await comment.save();
-      res.send('comment saved');
+      return res.send('comment saved');
     } catch (err) {
-      next(err);
+      return next(err);
     }
   },
 ];
@@ -45,8 +45,35 @@ exports.comment_delete = async (req, res, next) => {
   const { commentId } = req.body;
   try {
     await Comment.findByIdAndDelete(commentId);
-    res.send('comment deleted');
+    return res.send('comment deleted');
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
+
+exports.comment_update = [
+  body('content').trim().isLength({ max: 50 }),
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next(errors);
+    }
+
+    try {
+      const { commentId } = req.body;
+      const oldComment = await Comment.findById(commentId).exec();
+      const newComment = new Comment({
+        _id: commentId,
+        post: oldComment.post,
+        content: req.body.content,
+        guestId: oldComment.guestId,
+        guestPassword: oldComment.guestPassword,
+        date: oldComment.date,
+      });
+      await Comment.findByIdAndUpdate(commentId, newComment, {});
+      return res.send('comment updated');
+    } catch (err) {
+      return next(err);
+    }
+  },
+];
