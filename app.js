@@ -36,10 +36,8 @@ app.use(function (req, res, next) {
 });
 
 // error handler
-app.use(function (err, req, res) {
-  res.json({
-    error: err,
-  });
+app.use(function (err, req, res, next) {
+  res.json(err);
 });
 
 module.exports = app;

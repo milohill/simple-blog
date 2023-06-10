@@ -13,13 +13,14 @@ const postSchema = new Schema({
     required: true,
     maxLength: 100,
   },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
   author: {
     type: Schema.ObjectId,
     required: true,
+  },
+  // no need to input
+  date: {
+    type: Date,
+    default: Date.now,
   },
 });
 
