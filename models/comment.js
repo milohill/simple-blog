@@ -12,10 +12,6 @@ const commentSchema = new Schema({
     required: true,
     maxLength: 50,
   },
-  guestId: {
-    type: String,
-    required: true,
-  },
   guestPassword: {
     type: String,
     require: true,

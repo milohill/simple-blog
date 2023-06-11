@@ -3,7 +3,6 @@ const { body, validationResult } = require('express-validator');
 const Comment = require('../models/comment');
 require('dotenv').config();
 
-// for the editor
 exports.comment_list = async (req, res, next) => {
   try {
     const comments = await Comment.find({ post: req.params.postId }).exec();
@@ -14,10 +13,8 @@ exports.comment_list = async (req, res, next) => {
   }
 };
 
-// for the editor
 exports.comment_create = [
   body('content').trim().isLength({ max: 50 }),
-  body('guestId').trim(),
   body('guestPassword').trim(),
   async (req, res, next) => {
     const errors = validationResult(req);
@@ -30,7 +27,6 @@ exports.comment_create = [
       const comment = new Comment({
         post: req.params.postId,
         content: req.body.content,
-        guestId: req.body.guestId,
         guestPassword: hashedGuestPassword,
       });
       await comment.save();
@@ -43,11 +39,21 @@ exports.comment_create = [
 
 exports.comment_delete = async (req, res, next) => {
   const { commentId } = req.body;
+  const { guestPassword } = req.body;
+
   try {
+    const comment = await Comment.findOne({ _id: commentId }).exec();
+    const isCorrect = await bcrypt.compare(
+      guestPassword,
+      comment.guestPassword
+    );
+    if (!isCorrect) {
+      return res.send('the password does not match');
+    }
     await Comment.findByIdAndDelete(commentId);
     return res.send('comment deleted');
   } catch (err) {
-    return next(err);
+    next(err);
   }
 };
 
