@@ -6,5 +6,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 4000,
-  }
+  },
+  rollupOptions: {
+    input: "./src/main.js",
+  },
 })
