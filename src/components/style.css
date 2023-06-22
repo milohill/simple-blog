@@ -6,6 +6,12 @@
   height: 100vh;
 }
 
+h1,
+h2,
+p {
+  margin: 0;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
@@ -58,12 +64,12 @@ nav {
 
 nav button {
   background: none;
-	color: inherit;
-	border: none;
-	padding: 0;
-	font: inherit;
-	cursor: pointer;
-	outline: inherit;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
 }
 
 .search-bar-container {
@@ -141,7 +147,37 @@ nav button {
 .board-content.about div:nth-child(2) {
   display: flex;
   gap: 20px;
-} 
+}
+
+.board-content.blog {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.board-content.blog .post {
+  border-radius: 20px;
+
+  box-shadow: 0 0 10px 0 gray;
+
+  padding: 20px;
+
+  flex-basis: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.board-content.blog .post div:nth-child(1) {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  border-bottom: 1px solid white;
+}
+
+.board-content.blog .post div:nth-child(3) {
+  margin-top: auto;
+}
 
 footer {
   display: flex;
