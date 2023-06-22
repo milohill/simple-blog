@@ -6,6 +6,11 @@
   height: 100vh;
 }
 
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+}
+
 a,
 a:hover,
 a:focus,
@@ -18,7 +23,7 @@ input:focus,
 select:focus,
 textarea:focus,
 button:focus {
-    outline: none;
+  outline: none;
 }
 
 .main-content {
@@ -54,16 +59,34 @@ nav {
 .search-bar-container {
   grid-column: 3;
   grid-row: 1;
+
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
+
+  margin-right: 20px;
 }
 
 .search-bar-container input {
   border-radius: 10px;
-  padding: 5px 10px;
+  padding: 3px 15px;
+}
+
+.search-bar-container button {
+  font-size: 0.6rem;
+}
+
+.board {
+  grid-column: 2 / 4;
+  grid-row: 2 / 3;
 }
 
 footer {
-  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+
+  height: 30px;
+  font-size: 0.8rem;
 }

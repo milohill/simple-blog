@@ -2,9 +2,9 @@ import headerLogo from '../assets/images/main-logo.jpg';
 
 const HeaderLogo = () => {
   return (
-    <a className="header-logo" href="/">
-      <img src={headerLogo} alt="header logo" />
-    </a>
+    <div className="header-logo">
+      <img src={headerLogo} alt="header logo" draggable="false" />
+    </div>
   );
 };
 
