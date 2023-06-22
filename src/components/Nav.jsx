@@ -1,10 +1,11 @@
-const Nav = () => {
+const Nav = (props) => {
+  const { handleHomeClick, handleBlogClick, handleAboutClick } = props;
   return (
     <nav>
       <h2>Simple Blog</h2>
-      <a href="">Home</a>
-      <a href="">Blog</a>
-      <a href="">About</a>
+      <button onClick={handleHomeClick}>Home</button>
+      <button onClick={handleBlogClick}>Blog</button>
+      <button onClick={handleAboutClick}>About</button>
     </nav>
   );
 };
