@@ -9,7 +9,7 @@ const MainContent = () => {
       <HeaderLogo />
       <Nav />
       <SearchBar />
-      <Board />
+      <Board state="blog"/>
     </div>
   );
 };

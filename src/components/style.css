@@ -76,9 +76,26 @@ nav {
   font-size: 0.6rem;
 }
 
-.board {
+.board-content {
   grid-column: 2 / 4;
   grid-row: 2 / 3;
+
+  padding: 40px;
+}
+
+.board-content.home {
+  display: flex;
+  flex-direction: column;
+}
+
+.board-content.home img {
+  width: 500px;
+  border-radius: 10px;
+}
+
+.board-content.home div:nth-child(2) {
+  display: flex;
+  gap: 20px;
 }
 
 footer {
