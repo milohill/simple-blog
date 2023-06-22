@@ -89,7 +89,7 @@ nav {
 }
 
 .board-content.home img {
-  width: 500px;
+  height: 600px;
   border-radius: 10px;
 }
 
@@ -97,6 +97,41 @@ nav {
   display: flex;
   gap: 20px;
 }
+
+.board-content.about {
+  display: flex;
+  flex-direction: column;
+}
+
+.board-content.about img {
+  height: 600px;
+}
+
+.board-content.about div:nth-child(1) {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.board-content.about div:nth-child(1) h1 {
+  margin: 0;
+}
+
+.board-content.about div:nth-child(1) a {
+  padding-top: 5px;
+  width: 30px;
+  height: 30px;
+}
+
+.board-content.about div:nth-child(1) a img {
+  width: 30px;
+  height: 30px;
+}
+
+.board-content.about div:nth-child(2) {
+  display: flex;
+  gap: 20px;
+} 
 
 footer {
   display: flex;

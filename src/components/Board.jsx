@@ -4,10 +4,7 @@ import About from './About';
 
 const Board = (props) => {
   const { state } = props;
-  if (state !== 'blog') {
-    return <Blog />
-  }
-  return <Home />
+  return <About />
 };
 
 export default Board;
