@@ -5,9 +5,9 @@ const Post = require('../models/post');
 exports.post_list = async (req, res, next) => {
   try {
     const allPosts = await Post.find().exec();
-    res.json(allPosts);
+    return res.json(allPosts);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 

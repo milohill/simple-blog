@@ -16,6 +16,7 @@ const postSchema = new Schema({
   author: {
     type: Schema.ObjectId,
     required: true,
+    ref: 'User',
   },
   // no need to input
   date: {
