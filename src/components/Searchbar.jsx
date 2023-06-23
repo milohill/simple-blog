@@ -1,13 +1,9 @@
 const SearchBar = () => {
   return (
     <div className="search-bar-container">
-      <form action="" method='post'>
-        <input type="text" /> 
-        <button>Search</button>
-      </form>
+      <input type="text" placeholder="Search"/>
     </div>
-  )
-
+  );
 };
 
 export default SearchBar;

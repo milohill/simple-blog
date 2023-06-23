@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import HeaderLogo from './HeaderLogo';
 import Nav from './Nav';
-import SearchBar from './SearchBar';
 import Board from './Board';
 
 const MainContent = () => {
@@ -27,7 +26,6 @@ const MainContent = () => {
         handleBlogClick={handleBlogClick}
         handleAboutClick={handleAboutClick}
       />
-      <SearchBar />
       <Board pageState={pageState} />
     </div>
   );

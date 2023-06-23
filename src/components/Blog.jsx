@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Post from './Post';
+import SearchBar from './SearchBar';
 
 const Blog = () => {
   useEffect(() => {
@@ -16,9 +17,12 @@ const Blog = () => {
 
   return (
     <div className="board-content blog">
-      {posts.map((el) => (
-        <Post obj={el} />
-      ))}
+      <SearchBar />
+      <div className="post-container">
+        {posts.map((el) => (
+          <Post obj={el} />
+        ))}
+      </div>
     </div>
   );
 };
