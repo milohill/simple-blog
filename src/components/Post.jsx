@@ -36,7 +36,7 @@ const Post = (props) => {
           <div>{formattedDate}</div>
         </div>
       </div>
-      <div>{content}</div>
+      <div>{content.length > 15 ? content.slice(0, 15) + '...' : content}</div>
       <div>Comments ({comments.length})</div>
     </div>
   );
