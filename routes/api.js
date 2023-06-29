@@ -5,6 +5,7 @@ const router = express.Router();
 // controllers
 const postController = require('../controllers/postController');
 const commentController = require('../controllers/commentController');
+const adminController = require('../controllers/adminController');
 
 // list every post
 router.get('/posts', postController.post_list);
@@ -23,5 +24,17 @@ router.post('/comments/:postId/delete', commentController.comment_delete);
 
 // update a comment in a post
 router.post('/comments/:postId/update', commentController.comment_update);
+
+// create an admin credential
+router.post('/admin/signup', adminController.admin_signup);
+
+// authenticate admin
+router.post('/admin/login', adminController.admin_login);
+
+// test the server
+router.post('/test', (req, res, next) => {
+  console.log(req.body);
+  res.send(req.body);
+});
 
 module.exports = router;
