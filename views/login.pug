@@ -1,0 +1,14 @@
+head
+  link(rel="stylesheet", href="/stylesheets/style.css")
+
+body
+  div(class="login-form-container")
+    form(action="" method="post")
+      h1 Enter your credential
+      div
+        label(for="name") ID: 
+        input(type="text" id="name" name="name" required)
+      div
+        label(for="password") PASSWORD: 
+        input(type="text" id="password" name="password" required)
+      button confirm
