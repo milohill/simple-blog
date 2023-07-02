@@ -28,9 +28,6 @@ router.post('/comments/:postId/update', commentController.comment_update);
 // create an admin credential
 router.post('/admin/signup', adminController.admin_signup);
 
-// authenticate admin
-router.post('/admin/login', adminController.admin_login);
-
 // test the server
 router.post('/test', (req, res, next) => {
   console.log(req.body);
