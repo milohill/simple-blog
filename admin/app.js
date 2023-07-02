@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const bcrypt = require('bcryptjs');
 const Admin = require('./models/admin');
+require('dotenv').config();
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local')
@@ -45,6 +46,10 @@ passport.use(new LocalStrategy(
               done(err);
           });
 }));
+
+passport.serializeUser(function(admin, cb) {
+  cb(null, admin.id);
+});
 
 var indexRouter = require('./routes/index');
 
