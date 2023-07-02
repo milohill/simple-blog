@@ -3,7 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const Admin = require('./models/Admin');
+const bcrypt = require('bcryptjs');
+const Admin = require('./models/admin');
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local')
@@ -26,24 +27,25 @@ passport.use(new LocalStrategy(
     usernameField: 'name',
     passwordField: 'password'
   },
-  function(name, password, cb) {
-      Admin.findOne({ id: username })
-          .then((user) => {
-              if (!user) { return cb(null, false) }
+  function(name, password, done) {
+      Admin.findOne({ name })
+          .then(async (admin) => {
+              if (!admin) { return done(null, false) }
               
               // Function defined at bottom of app.js
-              const isValid = validPassword(password, user.hash, user.salt);
+              const isValid = await bcrypt.compare(admin.password, password);
               
               if (isValid) {
-                  return cb(null, user);
+                  return done(null, user);
               } else {
-                  return cb(null, false);
+                  return done(null, false);
               }
           })
           .catch((err) => {   
-              cb(err);
+              done(err);
           });
 }));
+
 var indexRouter = require('./routes/index');
 
 var app = express();
