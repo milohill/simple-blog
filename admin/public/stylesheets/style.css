@@ -1,0 +1,28 @@
+body {
+  padding: 50px;
+  font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00b7ff;
+}
+
+.login-form-container {
+  display: flex;
+  justify-content: center;
+}
+
+.login-form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  background-color: lightgray;
+  border-radius: 10px;
+
+  padding: 30px;
+}
+
+.login-form-container div input {
+  width: 100%;
+}
