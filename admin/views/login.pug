@@ -2,13 +2,15 @@ head
   link(rel="stylesheet", href="/stylesheets/style.css")
 
 body
-  div(class="login-form-container")
+  div.login-form-container
     form(action="" method="post")
       h1 Enter your credential
       div
-        label(for="name") ID: 
-        input(type="text" id="name" name="name" required)
+        label(for="name") NAME:
+        input(type="text" id="name" name="name" value= form ? form.name : '' required)
       div
         label(for="password") PASSWORD: 
-        input(type="text" id="password" name="password" required)
+        input(type="password" id="password" name="password" required)
+      if errors
+        div.error-message #{errors}
       button confirm

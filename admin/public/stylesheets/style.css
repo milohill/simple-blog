@@ -26,3 +26,11 @@ a {
 .login-form-container div input {
   width: 100%;
 }
+
+.front-message span {
+  color: blue;
+}
+
+.error-message {
+  color: red;
+}

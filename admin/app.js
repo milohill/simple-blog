@@ -3,14 +3,16 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const bcrypt = require('bcryptjs');
-const Admin = require('./models/admin');
-require('dotenv').config();
-
-const passport = require('passport');
-const LocalStrategy = require('passport-local')
-
 const mongoose = require('mongoose');
+
+const Admin = require('./models/admin');
+
+require('dotenv').config();
+const bcrypt = require('bcryptjs');
+const session = require('express-session');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const flash = require('connect-flash');
 
 const mongoDB = process.env.MONGO_DB_URL;
 
@@ -28,27 +30,38 @@ passport.use(new LocalStrategy(
     usernameField: 'name',
     passwordField: 'password'
   },
-  function(name, password, done) {
-      Admin.findOne({ name })
-          .then(async (admin) => {
-              if (!admin) { return done(null, false) }
-              
-              // Function defined at bottom of app.js
-              const isValid = await bcrypt.compare(admin.password, password);
-              
-              if (isValid) {
-                  return done(null, user);
-              } else {
-                  return done(null, false);
-              }
-          })
-          .catch((err) => {   
-              done(err);
-          });
-}));
+  async function(name, password, done) {
+    try {
+      const admin = await Admin.findOne({ name });
+      if (!admin) {
+        return done(null, false, { message: 'Name not found' });
+      }
 
-passport.serializeUser(function(admin, cb) {
-  cb(null, admin.id);
+      const isValid = await bcrypt.compare(password, admin.password)
+      if (!isValid) {
+        return done(null, false, { message: 'Incorrect password' });
+      }
+      
+      return done(null, admin);
+    } catch (err) {
+      return done(null, false);
+    }
+  }));
+
+passport.serializeUser(function(admin, done) {
+  done(null, admin._id);
+});
+
+passport.deserializeUser(async function(id, done) {
+  try {
+    const admin = await Admin.findById(id);
+    if (!admin) {
+      return done(null, false);
+    }
+    return done(null, admin);
+  } catch (error) {
+    done(null, error)
+  }
 });
 
 var indexRouter = require('./routes/index');
@@ -59,11 +72,31 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+app.use(flash())
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// app configuration
+app.use(session({
+  //secret: process.env.SECRET,
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+      maxAge: 1000 * 10
+  }
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+// store the user object in the locals
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  next();
+})
 
 app.use('/', indexRouter);
 
