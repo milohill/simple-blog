@@ -1,6 +1,7 @@
 body {
-  padding: 50px;
   font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif;
+  padding: 0;
+  margin: 0;
 }
 
 a {
@@ -25,6 +26,19 @@ a {
 
 .login-form-container div input {
   width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding-left: 20px;
+  padding-right: 20px;
+
+  background-color: lightgray;
+
+  box-shadow: 10px 5px 5px gray;
 }
 
 .front-message span {
