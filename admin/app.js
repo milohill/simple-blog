@@ -14,7 +14,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const flash = require('connect-flash');
 
-const mongoDB = process.env.MONGO_DB_URL;
+const mongoDB = process.env.MONGODB_URL;
 
 const main = async () => {
   await mongoose.connect(mongoDB);

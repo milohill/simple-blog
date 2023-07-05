@@ -18,6 +18,10 @@ const postSchema = new Schema({
     required: true,
     ref: 'User',
   },
+  published: {
+    type: Boolean,
+    required: true,
+  },
   // no need to input
   date: {
     type: Date,

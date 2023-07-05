@@ -32,7 +32,6 @@ router.get('/create', (req, res) => {
 })
 
 router.post('/create', (req, res) => {
-  console.log(req.body);
-  res.send(req.body);
+  const { title, content, published}
 })
 module.exports = router;

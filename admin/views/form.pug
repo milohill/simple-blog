@@ -6,9 +6,12 @@ html
 
   body
     form.create-post-form(action='' method='post')
-      textarea(placeholder='What do you have on your mind today?' name='formData')
-      label(for='published') Publish?
-        input(type='checkbox' id='published' name='published' value='true' checked)
+      .form-header
+        label(for='title') Title: 
+          input(id='title' type="text" name='title')
+        label(for='published') Publish? 
+          input(type='checkbox' id='published' name='published' value='true' checked)
+      textarea(placeholder='What do you have on your mind today?' name='content')
       button submit
 
     script.
