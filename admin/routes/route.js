@@ -4,6 +4,9 @@ const passport = require('passport');
 const { body, validationResult } = require('express-validator');
 
 router.get('/', function(req, res, next) {
+  if (!req.isAuthenticated()) {
+    return res.redirect('/login');
+  }
   res.render('index')
 });
 
@@ -28,10 +31,40 @@ router.post('/login',
 );
 
 router.get('/create', (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect('/login');
+  }
+
   res.render('create');
 })
 
-router.post('/create', (req, res) => {
-  const { title, content, published}
+router.post('/create', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect('/login');
+  }
+  
+  const { title, content } = req.body;
+  const published = req.body.published ? true : false;
+  const author = res.locals.user._id;
+
+  try {
+    await fetch('http://localhost:3000/api/posts/create', {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        title,
+        content,
+        published,
+        author,
+      })
+    })
+
+    return res.redirect('/');
+  } catch (error) {
+    return res.send(error)
+  }
 })
 module.exports = router;

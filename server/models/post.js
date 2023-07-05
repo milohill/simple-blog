@@ -13,14 +13,14 @@ const postSchema = new Schema({
     required: true,
     maxLength: 100,
   },
+  published: {
+    type: Boolean,
+    required: true,
+  },
   author: {
     type: Schema.ObjectId,
     required: true,
     ref: 'User',
-  },
-  published: {
-    type: Boolean,
-    required: true,
   },
   // no need to input
   date: {

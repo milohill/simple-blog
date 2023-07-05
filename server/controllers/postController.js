@@ -21,20 +21,24 @@ exports.post_create = [
     .trim()
     .isLength({ max: 100 })
     .withMessage(
-      'The content should be no more than 100 characters in length.'
+      'The content should be no more than 100 characters in length.',
     ),
   body('author').trim(),
+  body('published').trim(),
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       next(errors.array());
     }
 
-    const { title, content, author } = req.body;
+    const {
+      title, content, author, published,
+    } = req.body;
     const post = new Post({
       title,
       content,
       author,
+      published,
     });
 
     try {

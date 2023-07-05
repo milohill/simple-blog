@@ -10,7 +10,7 @@ html
         label(for='title') Title: 
           input(id='title' type="text" name='title')
         label(for='published') Publish? 
-          input(type='checkbox' id='published' name='published' value='true' checked)
+          input(type='checkbox' id='published' name='published' checked)
       textarea(placeholder='What do you have on your mind today?' name='content')
       button submit
 
@@ -21,6 +21,7 @@ html
         width: 500,
         height: 300,
         toolbar: 'undo redo | styleselect | bold italic',
+        forced_root_block : 'false'
       });
 
 
