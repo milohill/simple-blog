@@ -4,7 +4,6 @@ const passport = require('passport');
 const { body, validationResult } = require('express-validator');
 
 router.get('/', function(req, res, next) {
-  console.log(req.user);
   res.render('index')
 });
 
@@ -28,4 +27,12 @@ router.post('/login',
   passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login', failureFlash: true })
 );
 
+router.get('/create', (req, res) => {
+  res.render('create');
+})
+
+router.post('/create', (req, res) => {
+  console.log(req.body);
+  res.send(req.body);
+})
 module.exports = router;

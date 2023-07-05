@@ -48,3 +48,31 @@ a {
 .error-message {
   color: red;
 }
+
+.create-post-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.create-post-form button {
+  background-color: white;
+
+  border-radius: 5px;
+  border: 1px solid black;
+
+  width: 500px;
+  height: 25px;
+}
+
+.create-post-form button:hover {
+  background-color: #e0e1e1;
+  cursor: pointer;
+}
+
+.create-post-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

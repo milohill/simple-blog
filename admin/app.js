@@ -64,7 +64,7 @@ passport.deserializeUser(async function(id, done) {
   }
 });
 
-var indexRouter = require('./routes/index');
+var router = require('./routes/route');
 
 var app = express();
 
@@ -81,7 +81,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // app configuration
 app.use(session({
-  //secret: process.env.SECRET,
   secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
@@ -98,7 +97,7 @@ app.use((req, res, next) => {
   next();
 })
 
-app.use('/', indexRouter);
+app.use('/', router);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
