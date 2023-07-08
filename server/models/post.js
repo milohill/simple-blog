@@ -11,7 +11,7 @@ const postSchema = new Schema({
   content: {
     type: String,
     required: true,
-    maxLength: 100,
+    maxLength: 500,
   },
   published: {
     type: Boolean,
