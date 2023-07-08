@@ -5,6 +5,17 @@ body
   .header
     h1 Simple Blog (Admin)
     span.front-message Welcome 
-      span #{user.name}
-  .content
+      //- span #{user.name}
+  .main
     a.create-post-button(href='/create') Create a post
+    .post-container
+      for post in posts 
+        .post
+          .title-container
+            .title #{post.title}
+            .buttons
+              a(href='/') Delete
+              a(href='/') Edit
+          .content-container
+            div !{post.content}
+            div comment #{post.comments.length}
