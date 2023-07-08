@@ -13,6 +13,10 @@ router.get('/posts', postController.post_list);
 // create a post
 router.post('/posts/create', postController.post_create);
 
+router.post('/posts/:postId/delete', postController.post_delete);
+
+router.post('/posts/:postId/update', postController.post_update);
+
 // list comments according to a post
 router.get('/comments/:postId', commentController.comment_list);
 
