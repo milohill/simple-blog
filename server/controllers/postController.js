@@ -15,16 +15,22 @@ exports.post_list = async (req, res, next) => {
 exports.post_create = [
   body('title')
     .trim()
+    .isLength({ min: 1 })
+    .withMessage(
+      'The content should be more than 1 characters in length.',
+    )
     .isLength({ max: 5 })
-    .withMessage('The title should be no more than 1 character in length.'),
+    .withMessage('The title should be no more than 5 character in length.'),
   body('content')
     .trim()
+    .isLength({ min: 1 })
+    .withMessage(
+      'The content should be more than 1 characters in length.',
+    )
     .isLength({ max: 500 })
     .withMessage(
       'The content should be no more than 500 characters in length.',
     ),
-  body('author').trim(),
-  body('published').trim(),
 
   async (req, res) => {
     const errors = validationResult(req);

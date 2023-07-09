@@ -5,17 +5,22 @@ html
     script(src='https://cdn.tiny.cloud/1/9yo4wjmp7lg4u93qpj9i7w4x0e9b4r0gyw3yz6qi66w1by89/tinymce/6/tinymce.min.js')
 
   body
-    form.create-post-form(action='' method='post')
-      .form-header
-        label(for='title') Title: 
-          input(id='title' type="text" name='title')
-        label(for='published') Publish? 
-          input(type='checkbox' id='published' name='published' checked)
-      textarea(placeholder='What do you have on your mind today?' name='content')
-      if errors
-        for error in errors
-          div #{errors.msg}
-      button submit
+    .create-post-container
+      h1 Create a post
+      form.create-post-form(action='' method='post')
+        .form-header
+          label(for='title') Title: 
+            input(id='title' type="text" name='title' value= cachedForm ? cachedForm.title : '')
+          label(for='published') Publish? 
+            input(type='checkbox' id='published' name='published' checked= cachedForm ? cachedForm.published ? true : false : true)
+        textarea(placeholder='What do you have on your mind today?' name='content') #{cachedForm ? cachedForm.content : ''}
+        if errors
+          for error in errors
+            if error.msg
+              div.error-message #{error.msg}
+            else 
+              div.error-message #{error}
+        button submit
 
     script.
       tinymce.init({

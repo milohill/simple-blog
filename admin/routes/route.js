@@ -4,9 +4,9 @@ const passport = require('passport');
 const { body, validationResult } = require('express-validator');
 
 router.get('/', async function(req, res, next) {
-  // if (!req.isAuthenticated()) {
-  //   return res.redirect('/login');
-  // }
+  if (!req.isAuthenticated()) {
+    return res.redirect('/login');
+  }
   const response = await fetch('http://localhost:3000/api/posts');
   const posts = await response.json();
 
@@ -33,7 +33,7 @@ router.get('/login', function(req, res, next) {
 
   return res.render('login', { 
     errors: req.flash('error'),
-    form: req.session.loginFormData || null,
+    cachedForm: req.session.loginFormData || null,
    });
 })
 
@@ -48,14 +48,16 @@ router.post('/login',
 
 router.get('/create', (req, res) => {
   if (!req.isAuthenticated()) {
+    console.log('from get create');
     return res.redirect('/login');
   }
 
-  res.render('create');
+  res.render('form');
 })
 
 router.post('/create', async (req, res) => {
   if (!req.isAuthenticated()) {
+    console.log('from post create');
     return res.redirect('/login');
   }
 
@@ -78,18 +80,19 @@ router.post('/create', async (req, res) => {
       })
     })
     const json = await response.json();
-    console.log('RESPONSE', json);
-    // if errors ocurred from express validator
+    // if an error ocurred from express validator
     if (json !== 'post saved') {
-      return res.render('create', {
-        errors: json
+      return res.render('form', {
+        errors: json,
+        cachedForm: req.body
       })
     }
     return res.redirect('/');
   } catch (error) {
     console.log(error);
-    return res.render('create', {
-      errors: error
+    return res.render('form', {
+      errors: [ error ],
+      cachedForm: req.body
     })
   }
 })

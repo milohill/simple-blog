@@ -12,7 +12,9 @@ body
       for post in posts 
         .post
           .title-container
-            .title #{post.title}
+            .title
+              div #{post.title}
+              div #{post.published ? 'PUBLISHED' : 'NONPUBLISHED'}
             .buttons
               a(href='/') Delete
               a(href='/') Edit

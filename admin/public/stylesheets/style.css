@@ -157,7 +157,18 @@ a {
 
 .post .title-container .title {
   font-size: 2rem;
+
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
+
+.post .title-container .title div:nth-child(2) {
+  color: red;
+
+  font-size: 1.5rem;
+}
+
 
 .post .title-container .buttons {
   display: flex;
