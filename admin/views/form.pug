@@ -12,6 +12,9 @@ html
         label(for='published') Publish? 
           input(type='checkbox' id='published' name='published' checked)
       textarea(placeholder='What do you have on your mind today?' name='content')
+      if errors
+        for error in errors
+          div #{errors.msg}
       button submit
 
     script.

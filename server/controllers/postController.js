@@ -15,20 +15,21 @@ exports.post_list = async (req, res, next) => {
 exports.post_create = [
   body('title')
     .trim()
-    .isLength({ max: 10 })
-    .withMessage('The title should be no more than 10 characters in length.'),
+    .isLength({ max: 5 })
+    .withMessage('The title should be no more than 1 character in length.'),
   body('content')
     .trim()
-    .isLength({ max: 100 })
+    .isLength({ max: 500 })
     .withMessage(
-      'The content should be no more than 100 characters in length.',
+      'The content should be no more than 500 characters in length.',
     ),
   body('author').trim(),
   body('published').trim(),
-  async (req, res, next) => {
+
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      next(errors.array());
+      return res.json(errors.array());
     }
 
     const {
@@ -43,9 +44,9 @@ exports.post_create = [
 
     try {
       await newPost.save();
-      res.send('post saved');
+      res.json('post saved');
     } catch (err) {
-      next(err);
+      return res.json(err);
     }
   },
 ];

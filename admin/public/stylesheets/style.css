@@ -181,6 +181,7 @@ a {
   flex-grow: 1;
 }
 
-.post .content-container div:nth-child(2) {
-  align-self: self-end;
+.post .content-container > div:nth-child(2) {
+  display: flex;
+  justify-content: space-between;
 }

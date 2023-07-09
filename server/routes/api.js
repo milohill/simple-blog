@@ -34,7 +34,6 @@ router.post('/admin/signup', adminController.admin_signup);
 
 // test the server
 router.post('/test', (req, res, next) => {
-  console.log(req.body);
   res.send(req.body);
 });
 

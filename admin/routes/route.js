@@ -9,12 +9,15 @@ router.get('/', async function(req, res, next) {
   // }
   const response = await fetch('http://localhost:3000/api/posts');
   const posts = await response.json();
-  console.log(posts);
 
   const updatedPosts = await Promise.all(posts.map(async function(post) {
     const commentResponse = await fetch(`http://localhost:3000/api/comments/${post._id}`);
     const comments = await commentResponse.json();
     post.comments = comments;
+
+    const formattedDate = new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
+    post.date = formattedDate;
+
     return post;
   }));
 
@@ -61,7 +64,7 @@ router.post('/create', async (req, res) => {
   const author = res.locals.user._id;
 
   try {
-    await fetch('http://localhost:3000/api/posts/create', {
+    const response = await fetch('http://localhost:3000/api/posts/create', {
       method: 'post',
       headers: {
         'Accept': 'application/json',
@@ -74,10 +77,20 @@ router.post('/create', async (req, res) => {
         author,
       })
     })
-
+    const json = await response.json();
+    console.log('RESPONSE', json);
+    // if errors ocurred from express validator
+    if (json !== 'post saved') {
+      return res.render('create', {
+        errors: json
+      })
+    }
     return res.redirect('/');
   } catch (error) {
-    return res.send(error)
+    console.log(error);
+    return res.render('create', {
+      errors: error
+    })
   }
 })
 module.exports = router;

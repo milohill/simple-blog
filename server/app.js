@@ -12,13 +12,13 @@ const app = express();
 // DB connection
 const connectURL = process.env.MONGODB_URL;
 
-main().catch((err) => {
-  console.log(err);
-});
-
 async function main() {
   await mongoose.connect(connectURL);
 }
+
+main().catch((err) => {
+  console.log(err);
+});
 
 // routes
 const apiRoute = require('./routes/api');
