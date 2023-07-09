@@ -96,4 +96,17 @@ router.post('/create', async (req, res) => {
     })
   }
 })
+
+router.get('/:postId/delete', async (req, res) => {
+  const { postId } = req.params;
+  try {
+    await fetch(`http://localhost:3000/api/posts/${postId}/delete`, {
+      method: 'POST'
+    });
+    return res.redirect('/');
+  } catch (error) {
+    return res.send(error);
+  }
+})
+
 module.exports = router;

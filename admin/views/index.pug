@@ -16,8 +16,8 @@ body
               div #{post.title}
               div #{post.published ? 'PUBLISHED' : 'NONPUBLISHED'}
             .buttons
-              a(href='/') Delete
-              a(href='/') Edit
+              a(href=`/${post._id}/delete`) Delete
+              a(href=`/${post._id}/update`) Edit
           .content-container
             div !{post.content}
             div 
