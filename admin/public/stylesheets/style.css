@@ -163,7 +163,7 @@ a {
   gap: 20px;
 }
 
-.post .title-container .title div:nth-child(2) {
+.post .title-container .title-detail {
   color: red;
 
   font-size: 1.5rem;
@@ -192,11 +192,11 @@ a {
   flex-grow: 1;
 }
 
-.post .content-container > div:nth-child(1) {
+.post .content-container .title-detail {
   overflow-wrap: break-word;
 }
 
-.post .content-container > div:nth-child(2) {
+.post .content-container .title-published {
   display: flex;
   justify-content: space-between;
 }
@@ -230,12 +230,12 @@ a {
   border: 1px solid black;
 }
 
-.comment div:nth-child(1) {
+.comment .comment-detail {
   display: flex;
   justify-content: space-between;
 }
 
-.comment div:nth-child(1) > a {
+.comment .comment-detail > a {
   border: 1px solid black;
   border-radius: 5px;
 

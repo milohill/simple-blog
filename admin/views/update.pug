@@ -13,7 +13,7 @@ html
         if comments 
           for comment in comments 
             .comment
-              div
+              div.comment-detail
                 div #{comment.date}
                 a(href=`/${post._id}/${comment._id}/delete`) Delete
               div #{comment.content}
