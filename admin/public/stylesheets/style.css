@@ -61,14 +61,14 @@ a {
   color: red;
 }
 
-.create-post-form {
+.post-form {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
 }
 
-.create-post-form button {
+.post-form button {
   background-color: white;
 
   border-radius: 5px;
@@ -78,7 +78,7 @@ a {
   height: 25px;
 }
 
-.create-post-form button:hover {
+.post-form button:hover {
   background-color: #e0e1e1;
   cursor: pointer;
 }
@@ -195,4 +195,46 @@ a {
 .post .content-container > div:nth-child(2) {
   display: flex;
   justify-content: space-between;
+}
+
+.update-post-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.post-comments {
+  width: 500px;
+  height: 300px;
+
+  margin: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  overflow: auto;
+}
+
+.comment {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  
+  padding: 10px;
+
+  border: 1px solid black;
+}
+
+.comment div:nth-child(1) {
+  display: flex;
+  justify-content: space-between;
+}
+
+.comment div:nth-child(1) > a {
+  border: 1px solid black;
+  border-radius: 5px;
+
+  padding-left: 5px;
+  padding-right: 5px;
 }

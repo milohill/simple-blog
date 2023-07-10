@@ -11,6 +11,16 @@ exports.post_list = async (req, res, next) => {
   }
 };
 
+exports.post_get = async (req, res, next) => {
+  const { postId } = req.params;
+  try {
+    const post = await Post.findOne({ _id: postId });
+    return res.send(post);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 // for the editor
 exports.post_create = [
   body('title')
@@ -41,6 +51,7 @@ exports.post_create = [
     const {
       title, content, author, published,
     } = req.body;
+
     const newPost = new Post({
       title,
       content,
@@ -70,14 +81,16 @@ exports.post_delete = async (req, res) => {
 
 exports.post_update = async (req, res) => {
   const { postId } = req.params;
+  const { title, content, published } = req.body;
+  console.log(title, content, published);
 
   try {
     const oldPost = await Post.findOne({ _id: postId });
     const newPost = new Post({
       _id: oldPost._id,
-      title: req.body.title || oldPost.title,
-      content: req.body.content || oldPost.content,
-      published: req.body.published || oldPost.published,
+      title: title || oldPost.title,
+      content: content || oldPost.content,
+      published: published || oldPost.published,
       author: oldPost.author,
     });
     await Post.findOneAndUpdate({ _id: postId }, newPost);

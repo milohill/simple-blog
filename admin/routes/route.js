@@ -52,17 +52,16 @@ router.get('/create', (req, res) => {
     return res.redirect('/login');
   }
 
-  res.render('form');
+  res.render('create');
 })
 
+// update it!
 router.post('/create', async (req, res) => {
   if (!req.isAuthenticated()) {
-    console.log('from post create');
     return res.redirect('/login');
   }
 
-  const { title, content } = req.body;
-  const published = req.body.published ? true : false;
+  const { title, content, published } = req.body;
   const author = res.locals.user._id;
 
   try {
@@ -82,17 +81,16 @@ router.post('/create', async (req, res) => {
     const json = await response.json();
     // if an error ocurred from express validator
     if (json !== 'post saved') {
-      return res.render('form', {
+      return res.render('create', {
         errors: json,
-        cachedForm: req.body
+        post: req.body
       })
     }
     return res.redirect('/');
   } catch (error) {
-    console.log(error);
-    return res.render('form', {
+    return res.render('create', {
       errors: [ error ],
-      cachedForm: req.body
+      post: req.body
     })
   }
 })
@@ -107,6 +105,81 @@ router.get('/:postId/delete', async (req, res) => {
   } catch (error) {
     return res.send(error);
   }
+})
+
+router.get('/:postId/update', async (req, res) => {
+  const { postId } = req.params;
+  try {
+    const postResponse = await fetch(`http://localhost:3000/api/posts/${postId}`);
+    const postData = await postResponse.json();
+
+    const commentResponse = await fetch(`http://localhost:3000/api/comments/${postId}`);
+    const comments = await commentResponse.json();
+    const formattedComments = comments.map(comment => {
+      comment.date = new Date(comment.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' })
+      return comment;
+    })
+
+    return res.render('update', {
+      ifUpdate: true,
+      post: postData,
+      comments: formattedComments,
+    });
+  } catch (error) {
+    return next(error);
+  }
+})
+
+router.post('/:postId/update', async (req, res) => {
+  const { postId } = req.params;
+  const { title, content, published } = req.body;
+
+  try {
+    await fetch(`http://localhost:3000/api/posts/${postId}/update`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        title,
+        content,
+        published,
+      })
+    });
+    return res.redirect('/');
+  } catch (error) {
+    return next(error);
+  }
+})
+
+// comment deletion
+router.get('/:postId/:commentId/delete', async (req, res, next) => {
+  // in case it's not an authorized access
+  if (!req.isAuthenticated()) {
+    return res.redirect('/login');
+  }
+
+  const { postId } = req.params;
+  const { commentId } = req.params;
+
+  try {
+    await fetch(`http://localhost:3000/api/comments/${postId}/${commentId}/delete`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        ifAdmin: true,
+      })
+    });
+    // back to the post where the deletion happened
+    return res.redirect(`/${postId}/update`);
+  } catch (error) {
+    return next(error);
+  }
+
 })
 
 module.exports = router;

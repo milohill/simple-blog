@@ -10,6 +10,9 @@ const adminController = require('../controllers/adminController');
 // list every post
 router.get('/posts', postController.post_list);
 
+// get one post
+router.get('/posts/:postId', postController.post_get);
+
 // create a post
 router.post('/posts/create', postController.post_create);
 
@@ -24,10 +27,10 @@ router.get('/comments/:postId', commentController.comment_list);
 router.post('/comments/:postId/create', commentController.comment_create);
 
 // delete a comment from a post
-router.post('/comments/:postId/delete', commentController.comment_delete);
+router.post('/comments/:postId/:commentId/delete', commentController.comment_delete);
 
 // update a comment in a post
-router.post('/comments/:postId/update', commentController.comment_update);
+router.post('/comments/:postId/:commentId/update', commentController.comment_update);
 
 // create an admin credential
 router.post('/admin/signup', adminController.admin_signup);

@@ -38,20 +38,26 @@ exports.comment_create = [
 ];
 
 exports.comment_delete = async (req, res, next) => {
-  const { commentId } = req.body;
+  const { commentId } = req.params;
   const { guestPassword } = req.body;
+  const { ifAdmin } = req.body;
 
   try {
+    if (ifAdmin === true) {
+      await Comment.findByIdAndDelete(commentId);
+      return res.json('comment deleted');
+    }
+
     const comment = await Comment.findOne({ _id: commentId }).exec();
     const isCorrect = await bcrypt.compare(
       guestPassword,
-      comment.guestPassword
+      comment.guestPassword,
     );
     if (!isCorrect) {
       return res.send('the password does not match');
     }
     await Comment.findByIdAndDelete(commentId);
-    return res.send('comment deleted');
+    return res.json('comment deleted');
   } catch (err) {
     next(err);
   }
@@ -66,7 +72,7 @@ exports.comment_update = [
     }
 
     try {
-      const { commentId } = req.body;
+      const { commentId } = req.params;
       const oldComment = await Comment.findById(commentId).exec();
       const newComment = new Comment({
         _id: commentId,

@@ -1,0 +1,18 @@
+doctype html
+html 
+  head
+    link(rel="stylesheet", href="/stylesheets/style.css")
+    script(src='https://cdn.tiny.cloud/1/9yo4wjmp7lg4u93qpj9i7w4x0e9b4r0gyw3yz6qi66w1by89/tinymce/6/tinymce.min.js')
+
+  body
+    .update-post-container 
+      h1 Update a post 
+      include ./form.pug
+      .post-comments
+        if comments 
+          for comment in comments 
+            .comment
+              div
+                div #{comment.date}
+                a(href=`/${post._id}/${comment._id}/delete`) Delete
+              div #{comment.content}
