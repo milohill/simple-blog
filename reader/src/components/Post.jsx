@@ -7,7 +7,7 @@ const Post = (props) => {
   }, []);
 
   // destructure the props object
-  const { _id, title, content, author, date } = props.obj;
+  const { _id, title, content, author, date } = props.post;
 
   // format the date object
   const options = {

@@ -6,6 +6,7 @@ const Blog = () => {
   const [everyPost, setEveryPost] = useState([]);
   const [posts, setPosts] = useState([]);
 
+  // run once when this component is rendered
   useEffect(() => {
     fetchPosts();
   }, []);
@@ -32,8 +33,12 @@ const Blog = () => {
       <SearchBar func={filterPosts} />
       <div className="post-container">
         {posts.length > 0
-          ? posts.map((obj) => <Post obj={obj} />)
-          : everyPost.map((obj) => <Post obj={obj} />)}
+          ? posts.map((post) =>
+              post.published ? <Post post={post} /> : undefined
+            )
+          : everyPost.map((post) =>
+              post.published ? <Post post={post} /> : undefined
+            )}
       </div>
     </div>
   );
