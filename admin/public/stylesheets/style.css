@@ -192,6 +192,10 @@ a {
   flex-grow: 1;
 }
 
+.post .content-container > div:nth-child(1) {
+  overflow-wrap: break-word;
+}
+
 .post .content-container > div:nth-child(2) {
   display: flex;
   justify-content: space-between;
