@@ -48,14 +48,12 @@ router.post('/login',
 
 router.get('/create', (req, res) => {
   if (!req.isAuthenticated()) {
-    console.log('from get create');
     return res.redirect('/login');
   }
 
   res.render('create');
 })
 
-// update it!
 router.post('/create', async (req, res) => {
   if (!req.isAuthenticated()) {
     return res.redirect('/login');

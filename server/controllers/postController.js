@@ -21,7 +21,6 @@ exports.post_get = async (req, res, next) => {
   }
 };
 
-// for the editor
 exports.post_create = [
   body('title')
     .trim()
@@ -29,8 +28,8 @@ exports.post_create = [
     .withMessage(
       'The content should be more than 1 characters in length.',
     )
-    .isLength({ max: 5 })
-    .withMessage('The title should be no more than 5 character in length.'),
+    .isLength({ max: 30 })
+    .withMessage('The title should be no more than 30 character in length.'),
   body('content')
     .trim()
     .isLength({ min: 1 })
@@ -49,7 +48,7 @@ exports.post_create = [
     }
 
     const {
-      title, content, author, published,
+      published, title, content, author,
     } = req.body;
 
     const newPost = new Post({
@@ -79,10 +78,32 @@ exports.post_delete = async (req, res) => {
   }
 };
 
-exports.post_update = async (req, res) => {
+exports.post_update = [body('title')
+  .trim()
+  .isLength({ min: 1 })
+  .withMessage(
+    'The content should be more than 1 characters in length.',
+  )
+  .isLength({ max: 30 })
+  .withMessage('The title should be no more than 30 character in length.'),
+body('content')
+  .trim()
+  .isLength({ min: 1 })
+  .withMessage(
+    'The content should be more than 1 characters in length.',
+  )
+  .isLength({ max: 500 })
+  .withMessage(
+    'The content should be no more than 500 characters in length.',
+  ),
+async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.json(errors.array());
+  }
+
   const { postId } = req.params;
   const { title, content, published } = req.body;
-  console.log(title, content, published);
 
   try {
     const oldPost = await Post.findOne({ _id: postId });
@@ -98,4 +119,4 @@ exports.post_update = async (req, res) => {
   } catch (error) {
     return res.send(error);
   }
-};
+}];
