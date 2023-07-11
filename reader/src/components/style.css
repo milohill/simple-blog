@@ -159,6 +159,19 @@ nav button {
   gap: 20px;
 }
 
+
+.post-container .post div:nth-child(1) {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  
+  border-bottom: 1px solid white;
+}
+
+.post-container .post div:nth-child(3) {
+  margin-top: 30px;
+}
+
 .post-container .post {
   border-radius: 20px;
 
@@ -169,18 +182,15 @@ nav button {
   flex-basis: 400px;
   display: flex;
   flex-direction: column;
+
+  transition-duration: 0.1s;
 }
 
-.post-container .post div:nth-child(1) {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+.post-container .post:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 15px 0 white;
 
-  border-bottom: 1px solid white;
-}
-
-.post-container .post div:nth-child(3) {
-  margin-top: 30px;
+  cursor: pointer;
 }
 
 footer {

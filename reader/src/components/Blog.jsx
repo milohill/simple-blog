@@ -36,7 +36,7 @@ const Blog = () => {
 
   function mapArray(arr) {
     return arr.map((el) =>
-      el.published ? <Post key={el._id} post={el} /> : undefined
+      el.published ? <Post key={el._id} postData={el} /> : undefined
     );
   }
 
