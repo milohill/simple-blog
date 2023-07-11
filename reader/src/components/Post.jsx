@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 const Post = (props) => {
   const { postData } = props;
+  const { handlePostClick } = props;
 
   // have the function run on the initial rendering
   useEffect(() => {
@@ -32,7 +33,12 @@ const Post = (props) => {
   }
 
   return (
-    <div className="post">
+    <div
+      className="post"
+      onClick={() => {
+        handlePostClick(postData);
+      }}
+    >
       <div>
         <h2>{postData.title}</h2>
         <div>

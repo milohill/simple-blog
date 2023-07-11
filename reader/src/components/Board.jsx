@@ -4,6 +4,7 @@ import About from './About';
 
 const Board = (props) => {
   const { pageState } = props;
+
   switch (pageState) {
     case 'home':
       return <Home />;
