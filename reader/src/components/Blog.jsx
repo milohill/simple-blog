@@ -12,33 +12,39 @@ const Blog = () => {
   }, []);
 
   async function fetchPosts() {
-    const response = await fetch('http://localhost:3000/api/posts');
-    const json = await response.json();
-    setEveryPost(json);
+    try {
+      const response = await fetch('http://localhost:3000/api/posts');
+      const json = await response.json();
+      setEveryPost(json);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   function filterPosts(value) {
     if (value.length >= 1) {
       const filteredPosts = everyPost.filter(
-        (obj) =>
-          obj.title.toLowerCase().includes(value.toLowerCase()) ||
-          obj.content.toLowerCase().includes(value.toLowerCase())
+        (post) =>
+          post.title.toLowerCase().includes(value.toLowerCase()) ||
+          post.content.toLowerCase().includes(value.toLowerCase())
       );
       setPosts(filteredPosts);
+    } else {
+      setPosts(everyPost);
     }
+  }
+
+  function mapArray(arr) {
+    return arr.map((el) =>
+      el.published ? <Post key={el._id} post={el} /> : undefined
+    );
   }
 
   return (
     <div className="board-content blog">
       <SearchBar func={filterPosts} />
       <div className="post-container">
-        {posts.length > 0
-          ? posts.map((post) =>
-              post.published ? <Post post={post} /> : undefined
-            )
-          : everyPost.map((post) =>
-              post.published ? <Post post={post} /> : undefined
-            )}
+        {posts.length >= 1 ? mapArray(posts) : mapArray(everyPost)}
       </div>
     </div>
   );
