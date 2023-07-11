@@ -163,12 +163,11 @@ a {
   gap: 20px;
 }
 
-.post .title-container .title-detail {
+.post .title-container .title-published {
   color: red;
 
   font-size: 1.5rem;
 }
-
 
 .post .title-container .buttons {
   display: flex;
@@ -224,7 +223,7 @@ a {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  
+
   padding: 10px;
 
   border: 1px solid black;
