@@ -3,21 +3,16 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const commentSchema = new Schema({
-  post: {
-    type: Schema.ObjectId,
-    required: true,
-  },
   content: {
     type: String,
     required: true,
-    maxLength: 50,
+    maxLength: 100,
   },
   guestPassword: {
     type: String,
     require: true,
   },
-  // no need to input
-  date: {
+  createdAt: {
     type: Date,
     default: Date.now,
   },

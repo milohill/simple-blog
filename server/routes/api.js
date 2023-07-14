@@ -2,41 +2,43 @@ const express = require('express');
 
 const router = express.Router();
 
-// controllers
+// # Controllers
 const postController = require('../controllers/postController');
 const commentController = require('../controllers/commentController');
 const adminController = require('../controllers/adminController');
 
+// # Post APIs
 // list every post
 router.get('/posts', postController.post_list);
 
-// get one post
+// get a post
 router.get('/posts/:postId', postController.post_get);
 
-// create a post
+// create a new post
 router.post('/posts/create', postController.post_create);
 
+// delete a post
 router.post('/posts/:postId/delete', postController.post_delete);
 
+// update a post
 router.post('/posts/:postId/update', postController.post_update);
 
-// list comments according to a post
-router.get('/comments/:postId', commentController.comment_list);
+// # Comment APIs
+// create a new comment
+router.post('/posts/:postId/comments/create', commentController.comment_create);
 
-// create a comment with a post id
-router.post('/comments/:postId/create', commentController.comment_create);
+// delete a comment
+router.post('/posts/:postId/comments/:commentId/delete', commentController.comment_delete);
 
-// delete a comment from a post
-router.post('/comments/:postId/:commentId/delete', commentController.comment_delete);
+// update a comment
+router.post('/posts/:postId/comments/:commentId/update', commentController.comment_update);
 
-// update a comment in a post
-router.post('/comments/:postId/:commentId/update', commentController.comment_update);
-
-// create an admin credential
+// create a new admin credential
 router.post('/admin/signup', adminController.admin_signup);
 
+// # Misc.
 // test the server
-router.post('/test', (req, res, next) => {
+router.post('/test', (req, res) => {
   res.send(req.body);
 });
 

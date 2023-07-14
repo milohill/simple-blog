@@ -1,11 +1,11 @@
 const { body, validationResult } = require('express-validator');
 const Post = require('../models/post');
 
-// for the reader
 exports.post_list = async (req, res, next) => {
   try {
-    const allPosts = await Post.find().exec();
-    return res.json(allPosts);
+    // get every post in the data base whose comments' IDs are populated
+    const everyPost = await Post.find().populate('comments').exec();
+    return res.json(everyPost);
   } catch (err) {
     return next(err);
   }
@@ -14,10 +14,11 @@ exports.post_list = async (req, res, next) => {
 exports.post_get = async (req, res, next) => {
   const { postId } = req.params;
   try {
-    const post = await Post.findOne({ _id: postId });
-    return res.send(post);
-  } catch (error) {
-    return next(error);
+    // get one post in the data base whose comments' ID is populated
+    const post = await Post.findOne({ _id: postId }).populate('comments').exec();
+    return res.json(post);
+  } catch (err) {
+    return next(err);
   }
 };
 
@@ -25,98 +26,90 @@ exports.post_create = [
   body('title')
     .trim()
     .isLength({ min: 1 })
-    .withMessage(
-      'The content should be more than 1 characters in length.',
-    )
+    .withMessage('The title should be more than 1 character in length.')
     .isLength({ max: 30 })
-    .withMessage('The title should be no more than 30 character in length.'),
+    .withMessage('The title should be no more than 30 characters in length.'),
   body('content')
     .trim()
     .isLength({ min: 1 })
-    .withMessage(
-      'The content should be more than 1 characters in length.',
-    )
+    .withMessage('The content should be more than 1 character in length.')
     .isLength({ max: 500 })
-    .withMessage(
-      'The content should be no more than 500 characters in length.',
-    ),
-
-  async (req, res) => {
+    .withMessage('The content should be no more than 500 characters in length.'),
+  async (req, res, next) => {
+    // pass errors if any
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.json(errors.array());
+      return next(errors.array());
     }
 
     const {
-      published, title, content, author,
+      title, content, ifPublished, author,
     } = req.body;
 
     const newPost = new Post({
       title,
       content,
       author,
-      published,
+      ifPublished,
+      createdAt: new Date(),
     });
 
     try {
       await newPost.save();
-      res.json('post saved');
+      return res.json('post saved');
     } catch (err) {
-      return res.json(err);
+      return next(err);
     }
   },
 ];
 
-exports.post_delete = async (req, res) => {
+exports.post_delete = async (req, res, next) => {
   const { postId } = req.params;
 
   try {
     await Post.findByIdAndDelete(postId);
-    return res.send('post deleted');
-  } catch (error) {
-    return res.send(error);
+    return res.json('post deleted');
+  } catch (err) {
+    return next(err);
   }
 };
 
-exports.post_update = [body('title')
-  .trim()
-  .isLength({ min: 1 })
-  .withMessage(
-    'The content should be more than 1 characters in length.',
-  )
-  .isLength({ max: 30 })
-  .withMessage('The title should be no more than 30 character in length.'),
-body('content')
-  .trim()
-  .isLength({ min: 1 })
-  .withMessage(
-    'The content should be more than 1 characters in length.',
-  )
-  .isLength({ max: 500 })
-  .withMessage(
-    'The content should be no more than 500 characters in length.',
-  ),
-async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.json(errors.array());
-  }
+exports.post_update = [
+  body('title')
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage('The title should be more than 1 character in length.')
+    .isLength({ max: 30 })
+    .withMessage('The title should be no more than 30 character in length.'),
+  body('content')
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage('The content should be more than 1 character in length.')
+    .isLength({ max: 500 })
+    .withMessage('The content should be no more than 500 characters in length.'),
+  async (req, res, next) => {
+    // pass errors if any
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next(errors.array());
+    }
 
-  const { postId } = req.params;
-  const { title, content, published } = req.body;
+    const { postId } = req.params;
+    const { title, content, published } = req.body;
 
-  try {
-    const oldPost = await Post.findOne({ _id: postId });
-    const newPost = new Post({
-      _id: oldPost._id,
-      title: title || oldPost.title,
-      content: content || oldPost.content,
-      published: published || oldPost.published,
-      author: oldPost.author,
-    });
-    await Post.findOneAndUpdate({ _id: postId }, newPost);
-    return res.send('post updated');
-  } catch (error) {
-    return res.send(error);
-  }
-}];
+    try {
+      const oldPost = await Post.findOne({ _id: postId });
+      const postToUpdate = new Post({
+        title: title || oldPost.title,
+        content: content || oldPost.content,
+        published: published || oldPost.published,
+        updatedAt: new Date(),
+        _id: oldPost._id,
+        author: oldPost.author,
+      });
+      await Post.findByIdAndUpdate(postId, postToUpdate, {});
+      return res.json('post updated');
+    } catch (err) {
+      return next(err);
+    }
+  }];

@@ -13,19 +13,24 @@ const postSchema = new Schema({
     required: true,
     maxLength: 500,
   },
-  published: {
-    type: Boolean,
-    required: true,
-  },
   author: {
     type: Schema.ObjectId,
     required: true,
     ref: 'User',
   },
-  // no need to input
-  date: {
+  ifPublished: {
+    type: Boolean,
+    required: true,
+  },
+  comments: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Comment',
+  }],
+  createdAt: {
     type: Date,
-    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
   },
 });
 
