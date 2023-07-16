@@ -13,10 +13,8 @@ const adminSchema = new Schema({
     required: true,
     maxLength: 100,
   },
-  // no need to input
-  date: {
+  createdAt: {
     type: Date,
-    default: Date.now,
   },
 });
 

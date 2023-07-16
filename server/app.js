@@ -4,7 +4,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
-
 require('dotenv').config();
 
 const app = express();
@@ -20,7 +19,6 @@ main().catch((err) => {
   console.log(err);
 });
 
-// routes
 const apiRoute = require('./routes/api');
 
 app.use(logger('dev'));
@@ -37,7 +35,7 @@ app.use((req, res, next) => {
 });
 
 // error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   res.json(err);
 });
 

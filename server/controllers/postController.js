@@ -98,14 +98,14 @@ exports.post_update = [
     const { title, content, published } = req.body;
 
     try {
-      const oldPost = await Post.findOne({ _id: postId });
+      const oldPost = await Post.findOne({ _id: postId }).exec();
       const postToUpdate = new Post({
         title: title || oldPost.title,
         content: content || oldPost.content,
         published: published || oldPost.published,
-        updatedAt: new Date(),
         _id: oldPost._id,
         author: oldPost.author,
+        updatedAt: new Date(),
       });
       await Post.findByIdAndUpdate(postId, postToUpdate, {});
       return res.json('post updated');

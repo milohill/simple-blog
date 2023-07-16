@@ -3,16 +3,6 @@ const bcrypt = require('bcryptjs');
 const Post = require('../models/post');
 const Comment = require('../models/comment');
 
-// exports.comment_list = async (req, res, next) => {
-//   try {
-//     const { postId } = req.params;
-//     const comments = await Comment.find({ post: req.params.postId }).exec();
-//     return res.json(comments);
-//   } catch (err) {
-//     return next(err);
-//   }
-// };
-
 exports.comment_create = [
   body('content')
     .trim()
@@ -20,24 +10,32 @@ exports.comment_create = [
     .withMessage('The content should be more than 1 character in length.')
     .isLength({ max: 100 })
     .withMessage('The content should be no more than 100 characters in length.'),
-  body('guestPassword').trim(),
+  body('guestPassword')
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage('The password should be more than 1 character in length.')
+    .isLength({ max: 100 })
+    .withMessage('The password should be no more than 100 characters in length.'),
   async (req, res, next) => {
+    // pass errors if any
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return next(errors.array());
     }
 
-    try {
-      const { postId } = req.params;
-      const postToBeUpdated = await Post.findOne({ _id: postId });
+    const { postId } = req.params;
+    const { content } = req.body;
+    const { guestPassword } = req.body;
 
-      const hashedGuestPassword = await bcrypt.hash(req.body.guestPassword, 10);
+    try {
+      const postToBeUpdated = await Post.findOne({ _id: postId }).exec();
+      const hashedGuestPassword = await bcrypt.hash(guestPassword, 10);
       const newComment = new Comment({
-        content: req.body.content,
+        content,
         guestPassword: hashedGuestPassword,
+        createdAt: new Date(),
       });
       const savedComment = await newComment.save();
-
       // push the saved comment's id to the corresponded post
       postToBeUpdated.comments.push(savedComment._id);
       await Post.findByIdAndUpdate(postId, postToBeUpdated, {});
@@ -51,21 +49,22 @@ exports.comment_create = [
 exports.comment_delete = async (req, res, next) => {
   const { commentId } = req.params;
   const { guestPassword } = req.body;
-  const { ifAdmin } = req.body;
+  const { adminPassword } = req.body;
 
   try {
-    if (ifAdmin === true) {
+    // if by admin
+    if (adminPassword === 'c8a9ac481f0b5b4f43fcfbf3cbbec918d0f4d3b7') {
       await Comment.findByIdAndDelete(commentId);
       return res.json('comment deleted');
     }
-
+    // if by guest
     const comment = await Comment.findOne({ _id: commentId }).exec();
     const isCorrect = await bcrypt.compare(
       guestPassword,
       comment.guestPassword,
     );
     if (!isCorrect) {
-      return res.send('the password does not match');
+      return res.json('password unmatched');
     }
     await Comment.findByIdAndDelete(commentId);
     return res.json('comment deleted');
@@ -75,26 +74,41 @@ exports.comment_delete = async (req, res, next) => {
 };
 
 exports.comment_update = [
-  body('content').trim().isLength({ max: 50 }),
+  body('content')
+    .isLength({ min: 1 })
+    .withMessage('The content should be more than 1 character in length.')
+    .isLength({ max: 100 })
+    .withMessage('The content should be no more than 100 characters in length.'),
   async (req, res, next) => {
+    // pass errors if any
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return next(errors);
+      return next(errors.array());
     }
 
+    const { commentId } = req.params;
+    const { guestPassword } = req.body;
+    const { content } = req.body;
+
     try {
-      const { commentId } = req.params;
       const oldComment = await Comment.findById(commentId).exec();
+      const isCorrect = await bcrypt.compare(
+        guestPassword,
+        oldComment.guestPassword,
+      );
+      if (!isCorrect) {
+        return res.json('password unmatched');
+      }
       const newComment = new Comment({
-        _id: commentId,
-        post: oldComment.post,
-        content: req.body.content,
+        _id: oldComment._id,
         guestId: oldComment.guestId,
         guestPassword: oldComment.guestPassword,
-        date: oldComment.date,
+        createdAt: oldComment.createdAt,
+        content,
+        updatedAt: new Date(),
       });
       await Comment.findByIdAndUpdate(commentId, newComment, {});
-      return res.send('comment updated');
+      return res.json('comment updated');
     } catch (err) {
       return next(err);
     }
