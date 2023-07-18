@@ -10,13 +10,11 @@ const PostDetail = (props) => {
     new Date(postDetailData.updatedAt || postDetailData.createdAt),
     'day'
   );
+  const formURL = `http://localhost:3000/api/posts/${postDetailData._id}/comments/create`;
 
   return (
     <div className="post-detail">
-      <button
-        className="post-detail__return-button"
-        onClick={handleReturnClick}
-      >
+      <button className="button--small" onClick={handleReturnClick}>
         Return
       </button>
       <div className="post-detail__container">
@@ -35,6 +33,32 @@ const PostDetail = (props) => {
       </div>
       <div className="post-detail__comment-container">
         <h2>Comments</h2>
+        <form
+          className="post-detail__comment-form"
+          action={formURL}
+          method="post"
+        >
+          <div className="post-detail__comment-form-upper-part">
+            <div className="post-detail__comment-password">
+              <label htmlFor="comment-password">Password </label>
+              <input
+                id="comment-password"
+                type="password"
+                name="guestPassword"
+              />
+            </div>
+            <button className="post-detail__comment-submit-button button--small">
+              Submit
+            </button>
+          </div>
+          <textarea
+            className="post-detail__comment-content"
+            name="content"
+            cols="50"
+            rows="5"
+            placeholder="Be civil"
+          ></textarea>
+        </form>
         {postDetailData.comments.length === 0 ? (
           <div>-none-</div>
         ) : (

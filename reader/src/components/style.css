@@ -210,15 +210,13 @@ footer {
   grid-column: 2 / 4;
 }
 
-.post-detail__return-button {
+.button--small {
   display: flex;
   align-items: center;
   justify-content: center;
 
   height: 30px;
   width: 80px;
-
-  margin: 10px;
 }
 
 .post-detail__container {
@@ -239,7 +237,7 @@ footer {
 .post-detail__metadata {
   display: flex;
   justify-content: space-between;
-} 
+}
 
 .post-detail__content {
   min-height: 200px;
@@ -264,4 +262,16 @@ footer {
   padding: 20px;
 
   border-top: 1px solid white;
+}
+
+.post-detail__comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.post-detail__comment-form-upper-part {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
