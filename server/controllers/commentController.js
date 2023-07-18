@@ -24,8 +24,7 @@ exports.comment_create = [
     }
 
     const { postId } = req.params;
-    const { content } = req.body;
-    const { guestPassword } = req.body;
+    const { content, guestPassword } = req.body;
 
     try {
       const postToBeUpdated = await Post.findOne({ _id: postId }).exec();
@@ -48,8 +47,7 @@ exports.comment_create = [
 
 exports.comment_delete = async (req, res, next) => {
   const { commentId } = req.params;
-  const { guestPassword } = req.body;
-  const { adminPassword } = req.body;
+  const { guestPassword, adminPassword } = req.body;
 
   try {
     // if by admin

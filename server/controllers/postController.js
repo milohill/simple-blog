@@ -4,7 +4,7 @@ const Post = require('../models/post');
 exports.post_list = async (req, res, next) => {
   try {
     // get every post in the data base whose comments' IDs are populated
-    const everyPost = await Post.find().populate('comments').exec();
+    const everyPost = await Post.find().populate('author comments').exec();
     return res.json(everyPost);
   } catch (err) {
     return next(err);
@@ -15,7 +15,7 @@ exports.post_get = async (req, res, next) => {
   const { postId } = req.params;
   try {
     // get one post in the data base whose comments' ID is populated
-    const post = await Post.findOne({ _id: postId }).populate('comments').exec();
+    const post = await Post.findOne({ _id: postId }).populate('author comments').exec();
     return res.json(post);
   } catch (err) {
     return next(err);
@@ -77,14 +77,10 @@ exports.post_delete = async (req, res, next) => {
 exports.post_update = [
   body('title')
     .trim()
-    .isLength({ min: 1 })
-    .withMessage('The title should be more than 1 character in length.')
     .isLength({ max: 30 })
     .withMessage('The title should be no more than 30 character in length.'),
   body('content')
     .trim()
-    .isLength({ min: 1 })
-    .withMessage('The content should be more than 1 character in length.')
     .isLength({ max: 500 })
     .withMessage('The content should be no more than 500 characters in length.'),
   async (req, res, next) => {
@@ -102,9 +98,11 @@ exports.post_update = [
       const postToUpdate = new Post({
         title: title || oldPost.title,
         content: content || oldPost.content,
-        published: published || oldPost.published,
+        ifPublished: published || oldPost.ifPublished,
         _id: oldPost._id,
         author: oldPost.author,
+        comments: oldPost.comments,
+        createdAt: oldPost.createdAt,
         updatedAt: new Date(),
       });
       await Post.findByIdAndUpdate(postId, postToUpdate, {});

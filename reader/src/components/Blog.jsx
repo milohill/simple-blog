@@ -4,43 +4,45 @@ import SearchBar from './SearchBar';
 import PostDetail from './PostDetail';
 
 const Blog = () => {
+  // run once when this component is rendered
+  useEffect(() => {
+    fetchEveryPost();
+  }, []);
+
   const [everyPost, setEveryPost] = useState([]);
   const [posts, setPosts] = useState([]);
 
   const [postState, setPostState] = useState(true);
   const [postDetailData, setPostDetailData] = useState({});
 
-  function handlePostClick(post) {
-    setPostDetailData(post);
-    console.log('handlePostClick', post);
+  function handlePostClick(data) {
+    setPostDetailData(data);
     setPostState(false);
   }
 
-  function handleGoBackClick() {
+  function handleReturnClick() {
     setPostState(true);
   }
 
-  // run once when this component is rendered
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  async function fetchPosts() {
+  async function fetchEveryPost() {
     try {
       const response = await fetch('http://localhost:3000/api/posts');
-      const json = await response.json();
-      setEveryPost(json);
-    } catch (error) {
-      console.log(error);
+      const jsonPosts = await response.json();
+      console.log(jsonPosts);
+      setEveryPost(jsonPosts);
+    } catch (err) {
+      console.log(err);
+      // error handling how?
     }
   }
 
-  function filterPosts(value) {
-    if (value.length >= 1) {
+  function filterPosts(keyword) {
+    // if there's a value typed in the search bar
+    if (keyword.length >= 1) {
       const filteredPosts = everyPost.filter(
-        (post) =>
-          post.title.toLowerCase().includes(value.toLowerCase()) ||
-          post.content.toLowerCase().includes(value.toLowerCase())
+        (postObj) =>
+          postObj.title.toLowerCase().includes(keyword.toLowerCase()) ||
+          postObj.content.toLowerCase().includes(keyword.toLowerCase())
       );
       setPosts(filteredPosts);
     } else {
@@ -49,17 +51,18 @@ const Blog = () => {
   }
 
   function mapArray(arr) {
-    return arr.map((el) =>
-      el.published ? (
-        <Post postData={el} handlePostClick={handlePostClick} />
-      ) : undefined
-    );
+    return arr.map((postData) => {
+      if (postData.ifPublished) {
+        return <Post postData={postData} handlePostClick={handlePostClick} />;
+      }
+    });
   }
 
+  // if true display a list of posts, if false display a post detail
   if (postState) {
     return (
       <div className="board-content blog">
-        <SearchBar func={filterPosts} />
+        <SearchBar filterPosts={filterPosts} />
         <div className="post-container">
           {posts.length >= 1 ? mapArray(posts) : mapArray(everyPost)}
         </div>
@@ -68,7 +71,7 @@ const Blog = () => {
   }
   return (
     <PostDetail
-      handleGoBackClick={handleGoBackClick}
+      handleReturnClick={handleReturnClick}
       postDetailData={postDetailData}
     />
   );

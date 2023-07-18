@@ -13,14 +13,14 @@ const postSchema = new Schema({
     required: true,
     maxLength: 500,
   },
-  author: {
-    type: Schema.ObjectId,
-    required: true,
-    ref: 'User',
-  },
   ifPublished: {
     type: Boolean,
     required: true,
+  },
+  author: {
+    type: Schema.ObjectId,
+    required: true,
+    ref: 'Admin',
   },
   comments: [{
     type: Schema.Types.ObjectId,

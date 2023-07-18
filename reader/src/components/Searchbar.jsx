@@ -1,12 +1,12 @@
 const SearchBar = (props) => {
-  const { func } = props;
+  const { filterPosts } = props;
   return (
     <div className="search-bar-container">
       <input
         type="text"
         placeholder="Search"
         onChange={(event) => {
-          func(event.target.value);
+          filterPosts(event.target.value);
         }}
       />
     </div>
