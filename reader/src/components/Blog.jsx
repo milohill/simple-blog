@@ -28,7 +28,6 @@ const Blog = () => {
     try {
       const response = await fetch('http://localhost:3000/api/posts');
       const jsonPosts = await response.json();
-      console.log(jsonPosts);
       setEveryPost(jsonPosts);
     } catch (err) {
       console.log(err);

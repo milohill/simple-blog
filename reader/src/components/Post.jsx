@@ -1,20 +1,19 @@
-import { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import DOMPurify from 'dompurify';
 
 const Post = (props) => {
-  const { postData } = props;
-  const { handlePostClick } = props;
+  const { postData, handlePostClick } = props;
 
-  // format the date object
-  const options = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-  };
+  const formattedDate = dayjs(
+    new Date(postData.updatedAt || postData.createdAt)
+  ).format('DD/MM/YYYY');
 
-  const formattedDate = new Date(
-    postData.updatedAt || postData.createdAt
-  ).toLocaleDateString('en-US', options);
+  const sanitizedContentData = DOMPurify.sanitize(postData.content);
+  const extractedContentData = sanitizedContentData.replace(/<[^>]+>/g, '');
+  const shortenedContentData =
+    extractedContentData.length > 15
+      ? `${extractedContentData.slice(0, 15)}...`
+      : extractedContentData;
 
   return (
     <div
@@ -30,11 +29,7 @@ const Post = (props) => {
           <div>{formattedDate}</div>
         </div>
       </div>
-      <div>
-        {postData.content.length > 15
-          ? `${postData.content.slice(0, 15)}...`
-          : postData.content}
-      </div>
+      <div dangerouslySetInnerHTML={{ __html: shortenedContentData }} />
       <div>Comments ({postData.comments.length})</div>
     </div>
   );

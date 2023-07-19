@@ -1,9 +1,9 @@
 import React from 'react';
 import dayjs from 'dayjs';
+import DOMPurify from 'dompurify';
 
 const PostDetail = (props) => {
-  const { handleReturnClick } = props;
-  const { postDetailData } = props;
+  const { postDetailData, handleReturnClick } = props;
 
   const dateText = postDetailData.updatedAt ? 'Updated' : 'Created';
   const daysPassed = dayjs(new Date()).diff(
@@ -11,6 +11,8 @@ const PostDetail = (props) => {
     'day'
   );
   const formURL = `http://localhost:3000/api/posts/${postDetailData._id}/comments/create`;
+
+  const sanitizedContentData = DOMPurify.sanitize(postDetailData.content);
 
   return (
     <div className="post-detail">
@@ -29,7 +31,10 @@ const PostDetail = (props) => {
             } ago`}</div>
           </div>
         </div>
-        <div className="post-detail__content">{postDetailData.content}</div>
+        <div
+          className="post-detail__content"
+          dangerouslySetInnerHTML={{ __html: sanitizedContentData }}
+        />
       </div>
       <div className="post-detail__comment-container">
         <h2>Comments</h2>
