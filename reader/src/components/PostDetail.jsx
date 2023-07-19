@@ -62,12 +62,14 @@ const PostDetail = (props) => {
         {postDetailData.comments.length === 0 ? (
           <div>-none-</div>
         ) : (
-          postDetailData.comments.map((comment) => (
-            <div className="post-detail__comment">
-              <div>{dayjs(comment.createdAt).format('DD/MM/YYYY')}</div>
-              <div>{comment.content}</div>
-            </div>
-          ))
+          postDetailData.comments
+            .map((comment) => (
+              <div className="post-detail__comment">
+                <div>{dayjs(comment.createdAt).format('DD/MM/YYYY')}</div>
+                <div>{comment.content}</div>
+              </div>
+            ))
+            .reverse()
         )}
       </div>
     </div>

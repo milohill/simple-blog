@@ -32,19 +32,17 @@ passport.use(new LocalStrategy(
   },
   async function(name, password, done) {
     try {
-      const admin = await Admin.findOne({ name });
+      const admin = await Admin.findOne({ name }).exec();
       if (!admin) {
-        return done(null, false, { message: 'Name not found' });
+        return done(null, false, { message: 'name not found' });
       }
-
-      const isValid = await bcrypt.compare(password, admin.password)
+      const isValid = await bcrypt.compare(password, admin.password);
       if (!isValid) {
-        return done(null, false, { message: 'Incorrect password' });
+        return done(null, false, { message: 'incorrect password' });
       }
-      
       return done(null, admin);
     } catch (err) {
-      return done(null, false);
+      return done(err);
     }
   }));
 
@@ -54,25 +52,25 @@ passport.serializeUser(function(admin, done) {
 
 passport.deserializeUser(async function(id, done) {
   try {
-    const admin = await Admin.findById(id);
+    const admin = await Admin.findById(id).exec();
     if (!admin) {
-      return done(null, false);
+      return done(null, false, { message: 'admin not found by id' });
     }
     return done(null, admin);
-  } catch (error) {
-    done(null, error)
+  } catch (err) {
+    return done(err)
   }
 });
 
-var router = require('./routes/route');
+const router = require('./routes/route');
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(flash())
+app.use(flash());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -91,7 +89,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-// store the user object in the locals
+// store the user object in the locals variable to be used in view files
 app.use((req, res, next) => {
   res.locals.user = req.user;
   next();

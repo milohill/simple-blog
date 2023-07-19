@@ -1,19 +1,19 @@
 doctype html
 html 
-  head
-    link(rel="stylesheet", href="/stylesheets/style.css")
-    script(src='https://cdn.tiny.cloud/1/9yo4wjmp7lg4u93qpj9i7w4x0e9b4r0gyw3yz6qi66w1by89/tinymce/6/tinymce.min.js')
-
+  include ./metadata.pug
   body
-    .update-post-container
+    .update-post
       include ./home-button.pug
       h1 Update a post 
       include ./form.pug
-      .post-comments
-        if comments 
-          for comment in comments 
-            .comment
-              div.comment-detail
-                div #{comment.date}
-                a(href=`/${post._id}/${comment._id}/delete`) Delete
+      .update-post__comment-container
+        h2 Comments
+        if post.comments.length >= 1
+          for comment in post.comments 
+            .update-post__comment
+              div #{comment.createdAt}
               div #{comment.content}
+              a(href=`/${post._id}/${comment._id}/delete`)
+                b Delete
+        else 
+          div -none-

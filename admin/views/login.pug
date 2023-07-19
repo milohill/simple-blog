@@ -1,16 +1,15 @@
-head
-  link(rel="stylesheet", href="/stylesheets/style.css")
-
-body
-  div.login-form-container
-    form(action="" method="post")
+doctype html
+html
+  include ./metadata.pug
+  body
+    form.login-form(action="" method="post")
       h1 Enter your credential
       div
-        label(for="name") NAME:
-        input(type="text" id="name" name="name" value= cachedForm ? cachedForm.name : '' required)
+        label(for="name") NAME
+        input.login-form__input(type="text" id="name" name="name" required value= cachedForm ? cachedForm.name : '')
       div
-        label(for="password") PASSWORD: 
-        input(type="password" id="password" name="password" required)
+        label(for="password") PASSWORD
+        input.login-form__input(type="password" id="password" name="password" required)
       if errors
         div.error-message #{errors}
-      button confirm
+      button Login

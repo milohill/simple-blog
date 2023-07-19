@@ -5,6 +5,7 @@ exports.post_list = async (req, res, next) => {
   try {
     // get every post in the data base whose comments' IDs are populated
     const everyPost = await Post.find().populate('author comments').exec();
+
     return res.json(everyPost);
   } catch (err) {
     return next(err);
@@ -91,14 +92,14 @@ exports.post_update = [
     }
 
     const { postId } = req.params;
-    const { title, content, published } = req.body;
+    const { title, content, ifPublished } = req.body;
 
     try {
       const oldPost = await Post.findOne({ _id: postId }).exec();
       const postToUpdate = new Post({
         title: title || oldPost.title,
         content: content || oldPost.content,
-        ifPublished: published || oldPost.ifPublished,
+        ifPublished: ifPublished || oldPost.ifPublished,
         _id: oldPost._id,
         author: oldPost.author,
         comments: oldPost.comments,

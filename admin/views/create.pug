@@ -1,11 +1,8 @@
 doctype html
 html 
-  head
-    link(rel="stylesheet", href="/stylesheets/style.css")
-    script(src='https://cdn.tiny.cloud/1/9yo4wjmp7lg4u93qpj9i7w4x0e9b4r0gyw3yz6qi66w1by89/tinymce/6/tinymce.min.js')
-
+  include ./metadata.pug
   body
-    .create-post-container
+    .create-post
       include ./home-button.pug
       h1 Create a post
       include ./form.pug

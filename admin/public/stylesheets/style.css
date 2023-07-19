@@ -16,49 +16,47 @@ body {
 
 a {
   color: inherit;
-
   text-decoration: none;
 }
 
-.login-form-container {
-  margin-top: 50px;
+.login-form {
+  width: 350px;
 
-  display: flex;
-  justify-content: center;
-}
+  margin-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
 
-.login-form-container form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 
   background-color: lightgray;
   border-radius: 10px;
 
-  padding: 30px;
+  padding: 20px;
 }
 
-.login-form-container div input {
+.login-form__input {
   width: 100%;
 }
 
-.header {
+.index__header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
 
   padding-left: 20px;
   padding-right: 20px;
-
-  box-shadow: 10px 5px 5px gray;
 }
 
-.front-message span {
+.index__admin-name {
   color: blue;
+  font-weight: bold;
 }
 
 .error-message {
   color: red;
+  font-style: italic;
 }
 
 .post-form {
@@ -68,7 +66,7 @@ a {
   gap: 10px;
 }
 
-.post-form button {
+.post-form__submit-button {
   background-color: white;
 
   border-radius: 5px;
@@ -78,29 +76,29 @@ a {
   height: 25px;
 }
 
-.post-form button:hover {
-  background-color: #e0e1e1;
+.post-form__submit-button:hover {
+  background-color: lightgray;
   cursor: pointer;
 }
 
-.create-post-container {
+.create-post {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.form-header {
+.post-form__header {
   display: flex;
   justify-content: space-between;
 
   width: 500px;
 }
 
-.form-header label[for='title'] input {
+.post-form__header label[for='title'] input {
   width: 350px;
 }
 
-.main {
+.index__main-content {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -109,8 +107,8 @@ a {
   padding: 20px;
 }
 
-.create-post-button {
-  width: 500px;
+.index__create-post-button {
+  width: 300px;
   height: 30px;
 
   border: 1px solid black;
@@ -119,24 +117,22 @@ a {
   justify-content: center;
   align-items: center;
 
-  border-radius: 10px;
+  border-radius: 30px;
 }
 
-.create-post-button:hover {
+.index__create-post-button:hover {
   background-color: lightgray;
 }
 
-.post-container {
+.index__post-container {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 20px;
 }
 
-.post {
-  flex-grow: 1;
-
-  width: 500px;
-  height: 300px;
+.index__post {
+  width: 600px;
+  height: 80px;
 
   border: 1px solid black;
   border-radius: 10px;
@@ -144,69 +140,26 @@ a {
   padding: 20px;
 
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
-  gap: 20px;
-}
-
-.post .title-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.post .title-container .title {
-  font-size: 2rem;
-
-  display: flex;
   align-items: center;
   gap: 20px;
 }
 
-.post .title-container .title-published {
-  color: red;
-
-  font-size: 1.5rem;
-}
-
-.post .title-container .buttons {
+.index__post-buttons {
   display: flex;
   flex-direction: column;
   gap: 5px;
+
+  text-decoration: underline;
 }
 
-.post .title-container .buttons a {
-  border: 1px solid black;
-  border-radius: 5px;
-
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-.post .content-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  flex-grow: 1;
-}
-
-.post .content-container .title-detail {
-  overflow-wrap: break-word;
-}
-
-.post .content-container .title-published {
-  display: flex;
-  justify-content: space-between;
-}
-
-.update-post-container {
+.update-post {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.post-comments {
+.update-post__comment-container {
   width: 500px;
   height: 300px;
 
@@ -219,33 +172,18 @@ a {
   overflow: auto;
 }
 
-.comment {
+.update-post__comment {
   display: flex;
   flex-direction: column;
   gap: 10px;
 
   padding: 10px;
 
-  border: 1px solid black;
-}
-
-.comment .comment-detail {
-  display: flex;
-  justify-content: space-between;
-}
-
-.comment .comment-detail > a {
-  border: 1px solid black;
-  border-radius: 5px;
-
-  padding-left: 5px;
-  padding-right: 5px;
+  border-top: 1px solid black;
 }
 
 .home-button {
-  text-decoration: underline;
-  font-size: 1.2rem;
-
+  font-size: 1.1rem;
   color: blue;
 
   margin-top: 20px;

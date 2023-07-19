@@ -1,37 +1,28 @@
 var express = require('express');
 var router = express.Router();
 const passport = require('passport');
-const { body, validationResult } = require('express-validator');
 
-router.get('/', async function(req, res, next) {
+router.get('/', async (req, res, next) => {
   if (!req.isAuthenticated()) {
     return res.redirect('/login');
   }
-  const response = await fetch('http://localhost:3000/api/posts');
-  const posts = await response.json();
-
-  const updatedPosts = await Promise.all(posts.map(async function(post) {
-    const commentResponse = await fetch(`http://localhost:3000/api/comments/${post._id}`);
-    const comments = await commentResponse.json();
-    post.comments = comments;
-
-    const formattedDate = new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
-    post.date = formattedDate;
-
-    return post;
-  }));
-
-  res.render('index', {
-    posts: updatedPosts
-  });
+  try {
+    const response = await fetch('http://localhost:3000/api/posts');
+    const posts = await response.json();
+    return res.render('index', {
+      posts
+    });
+  } catch (err) {
+    return next(err);
+  }
 });
 
-router.get('/login', function(req, res, next) {
+router.get('/login', (req, res) => {
   if (req.isAuthenticated()) {
     return res.redirect('/');
   }
 
-  return res.render('login', { 
+  res.render('login', { 
     errors: req.flash('error'),
     cachedForm: req.session.loginFormData || null,
    });
@@ -41,7 +32,7 @@ router.post('/login',
   // retain login form data in case of a failure
   (req, res, next) => {
     req.session.loginFormData = req.body;
-    next();
+    return next();
   },
   passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login', failureFlash: true })
 );
@@ -54,13 +45,14 @@ router.get('/create', (req, res) => {
   res.render('create');
 })
 
-router.post('/create', async (req, res) => {
+router.post('/create', async (req, res, next) => {
   if (!req.isAuthenticated()) {
     return res.redirect('/login');
   }
 
-  const { title, content, published } = req.body;
+  const { title, content, ifPublished } = req.body;
   const author = res.locals.user._id;
+  console.log(title, content, ifPublished);
 
   try {
     const response = await fetch('http://localhost:3000/api/posts/create', {
@@ -72,8 +64,8 @@ router.post('/create', async (req, res) => {
       body: JSON.stringify({
         title,
         content,
-        published,
         author,
+        ifPublished,
       })
     })
     const json = await response.json();
@@ -85,52 +77,41 @@ router.post('/create', async (req, res) => {
       })
     }
     return res.redirect('/');
-  } catch (error) {
+  } catch (err) {
     return res.render('create', {
-      errors: [ error ],
+      errors: [ err ],
       post: req.body
     })
   }
 })
 
-router.get('/:postId/delete', async (req, res) => {
+router.get('/:postId/delete', async (req, res, next) => {
   const { postId } = req.params;
   try {
-    await fetch(`http://localhost:3000/api/posts/${postId}/delete`, {
-      method: 'POST'
-    });
+    await fetch(`http://localhost:3000/api/posts/${postId}/delete`);
     return res.redirect('/');
-  } catch (error) {
-    return res.send(error);
+  } catch (err) {
+    return next(err);
   }
 })
 
-router.get('/:postId/update', async (req, res) => {
+router.get('/:postId/update', async (req, res, next) => {
   const { postId } = req.params;
   try {
     const postResponse = await fetch(`http://localhost:3000/api/posts/${postId}`);
-    const postData = await postResponse.json();
-
-    const commentResponse = await fetch(`http://localhost:3000/api/comments/${postId}`);
-    const comments = await commentResponse.json();
-    const formattedComments = comments.map(comment => {
-      comment.date = new Date(comment.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' })
-      return comment;
-    })
+    const post = await postResponse.json();
 
     return res.render('update', {
-      ifUpdate: true,
-      post: postData,
-      comments: formattedComments,
+      post,
     });
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    return next(err);
   }
 })
 
 router.post('/:postId/update', async (req, res) => {
   const { postId } = req.params;
-  const { title, content, published } = req.body;
+  const { title, content, ifPublished } = req.body;
 
   try {
     await fetch(`http://localhost:3000/api/posts/${postId}/update`, {
@@ -138,46 +119,43 @@ router.post('/:postId/update', async (req, res) => {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      method: 'POST',
+      method: 'post',
       body: JSON.stringify({
         title,
         content,
-        published,
+        ifPublished,
       })
     });
     return res.redirect('/');
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    return next(err);
   }
 })
 
 // comment deletion
 router.get('/:postId/:commentId/delete', async (req, res, next) => {
-  // in case it's not an authorized access
   if (!req.isAuthenticated()) {
     return res.redirect('/login');
   }
 
-  const { postId } = req.params;
-  const { commentId } = req.params;
+  const { postId, commentId } = req.params;
 
   try {
-    await fetch(`http://localhost:3000/api/comments/${postId}/${commentId}/delete`, {
+    await fetch(`http://localhost:3000/api/posts/${postId}/comments/${commentId}/delete`, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      method: 'POST',
+      method: 'post',
       body: JSON.stringify({
-        ifAdmin: true,
+        adminPassword: process.env.ADMIN_PASSWORD,
       })
     });
     // back to the post where the deletion happened
     return res.redirect(`/${postId}/update`);
-  } catch (error) {
-    return next(error);
-  }
-
-})
+  } catch (err) {
+    return next(err);
+  };
+});
 
 module.exports = router;

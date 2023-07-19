@@ -18,7 +18,7 @@ router.get('/posts/:postId', postController.post_get);
 router.post('/posts/create', postController.post_create);
 
 // delete a post
-router.post('/posts/:postId/delete', postController.post_delete);
+router.get('/posts/:postId/delete', postController.post_delete);
 
 // update a post
 router.post('/posts/:postId/update', postController.post_update);

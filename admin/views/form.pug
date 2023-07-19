@@ -1,19 +1,18 @@
 doctype html
 html 
-  head
-    link(rel="stylesheet", href="/stylesheets/style.css")
-    script(src='https://cdn.tiny.cloud/1/9yo4wjmp7lg4u93qpj9i7w4x0e9b4r0gyw3yz6qi66w1by89/tinymce/6/tinymce.min.js')
-
+  include ./metadata.pug
   body    
     form.post-form(action='' method='post')
-      .form-header
-        label(for='title') Title: 
-          input(id='title' type="text" name='title' value= post ? post.title : '')
-        label(for='published-checkbox') Publish? 
+      .post-form__header
+        .post-form__title-input
+          label(for='title') Title 
+          input(id='title' type="text" name='title' size='40' value= post ? post.title : '')
+        .post-form__if-published-input
+          label(for='published-checkbox') Publish? 
           // a dummy checkbox for visualization
-          input(type='checkbox' id='published-checkbox' checked= post ? post.published : 'checked' )
+          input(type='checkbox' id='ifPublished-checkbox' checked= post ? post.ifPublished : 'checked' )
           // a hidden input that returns the real value given by the function named handTheCheckboxValue below
-          input(type='hidden' id='hidden-input' name='published' value='true')
+          input(type='hidden' id='hidden-input' name='ifPublished' value='true')
       textarea(placeholder='What do you have on your mind today?' name='content') #{post ? post.content : ''}
       if errors
         for error in errors
@@ -21,7 +20,8 @@ html
             div.error-message #{error.msg}
           else
             div.error-message #{error}
-      button #{ifUpdate ? 'confirm' : 'submit'}
+      // check it it's about updation or not
+      button.post-form__submit-button #{post ? post.createdAt ? 'Confirm' : 'Post' : 'Post'}
 
     // tiny mce script
     script.
@@ -34,7 +34,7 @@ html
         forced_root_block : 'false'
       });
 
-      const checkboxInput = document.querySelector('#published-checkbox');
+      const checkboxInput = document.querySelector('#ifPublished-checkbox');
       const hiddenInput = document.querySelector('#hidden-input');
       checkboxInput.addEventListener('change', function handTheCheckboxValue() {
         const isChecked = checkboxInput.checked;
