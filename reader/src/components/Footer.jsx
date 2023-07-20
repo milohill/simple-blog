@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <footer>
+    <footer className="footer">
       Copyright © 2023 by<a href="https://github.com/milohill">milohill</a>
     </footer>
   );

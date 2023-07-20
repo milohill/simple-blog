@@ -1,25 +1,86 @@
-import homeImage from '../assets/images/home-image.jpg';
+import { useState, useEffect } from 'react';
+import Post from './Post';
+import PostDetail from './PostDetail';
 
-const Home = () => (
-  <div className="board-content home">
-    <div>
-      <h1>Welcome!</h1>
+const Home = () => {
+  // run once when this component is rendered
+  useEffect(() => {
+    fetchEveryPost();
+  }, []);
+
+  const [everyPost, setEveryPost] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [postState, setPostState] = useState(true);
+  const [postDetailData, setPostDetailData] = useState({});
+
+  function handlePostClick(data) {
+    setPostDetailData(data);
+    setPostState(false);
+  }
+
+  function handleReturnClick() {
+    setPostState(true);
+  }
+
+  async function fetchEveryPost() {
+    try {
+      const response = await fetch('http://localhost:3000/api/posts');
+      const jsonPosts = await response.json();
+      setEveryPost(jsonPosts);
+    } catch (err) {
+      console.log(err);
+      // error handling how?
+    }
+  }
+
+  function filterPosts(keyword) {
+    if (keyword.length >= 1) {
+      const filteredPosts = everyPost.filter(
+        (postObj) =>
+          postObj.title.toLowerCase().includes(keyword.toLowerCase()) ||
+          postObj.content.toLowerCase().includes(keyword.toLowerCase())
+      );
+      setPosts(filteredPosts);
+    } else {
+      setPosts(everyPost);
+    }
+  }
+
+  function mapArray(arr) {
+    return arr.map((postData) => {
+      if (postData.ifPublished) {
+        return <Post postData={postData} handlePostClick={handlePostClick} />;
+      }
+      return <></>
+    });
+  }
+
+  // if true display a list of posts, if false display a post detail
+  if (postState) {
+    return (
+      <div className="home">
+        <input
+          className="search-bar"
+          type="text"
+          placeholder="Search"
+          onChange={(event) => {
+            filterPosts(event.target.value);
+          }}
+        />
+        <div className="post-container">
+          {posts.length >= 1 ? mapArray(posts) : mapArray(everyPost)}
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className="home">
+      <PostDetail
+        postDetailData={postDetailData}
+        handleReturnClick={handleReturnClick}
+      />
     </div>
-    <div>
-      <img src={homeImage} alt="home image" />
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-      praesentium, natus quo eveniet expedita illo dolores magnam enim sunt ad
-      consectetur veniam sint blanditiis, nemo ducimus voluptates? Doloribus
-      porro quibusdam id! Nam, debitis optio ad incidunt expedita saepe facilis
-      praesentium provident, atque repudiandae beatae quod asperiores numquam
-      modi obcaecati quasi distinctio quos perferendis? Eveniet dolores quia
-      explicabo numquam ducimus minus neque expedita exercitationem quod eos
-      fugiat consequatur dicta soluta rerum praesentium, sed voluptate placeat
-      rem. Suscipit fugit libero facere est vitae delectus recusandae voluptatum
-      porro aliquid cupiditate fugiat ipsa quae, itaque, laudantium illo
-      mollitia. Sint totam fugit officiis libero temporibus?
-    </div>
-  </div>
-);
+  );
+};
 
 export default Home;

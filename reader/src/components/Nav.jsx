@@ -1,11 +1,16 @@
 const Nav = (props) => {
-  const { handleHomeClick, handleBlogClick, handleAboutClick } = props;
+  const { handleHomeClick, handleAboutClick } = props;
   return (
-    <nav>
-      <button onClick={handleHomeClick}>Home</button>
-      <button onClick={handleBlogClick}>Blog</button>
-      <button onClick={handleAboutClick}>About</button>
-    </nav>
+    <>
+      <nav className="nav">
+        <div className="nav__home-button" onClick={handleHomeClick}>
+          Simple
+        </div>
+        <div className="nav__about-button" onClick={handleAboutClick}>
+          About
+        </div>
+      </nav>
+    </>
   );
 };
 

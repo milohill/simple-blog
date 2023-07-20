@@ -4,10 +4,6 @@ import DOMPurify from 'dompurify';
 const Post = (props) => {
   const { postData, handlePostClick } = props;
 
-  const formattedDate = dayjs(
-    new Date(postData.updatedAt || postData.createdAt)
-  ).format('DD/MM/YYYY');
-
   const sanitizedContentData = DOMPurify.sanitize(postData.content);
   const extractedContentData = sanitizedContentData.replace(/<[^>]+>/g, '');
   const shortenedContentData =
@@ -17,20 +13,18 @@ const Post = (props) => {
 
   return (
     <div
-      className="post"
+      className="post-container__post"
       onClick={() => {
         handlePostClick(postData);
       }}
     >
       <div>
-        <h2>{postData.title}</h2>
-        <div>
-          <p>{postData.author.name}</p>
-          <div>{formattedDate}</div>
-        </div>
+        <h2>
+          {postData.title} ({postData.comments.length})
+        </h2>
+        <div>{postData.author.name}</div>
       </div>
       <div dangerouslySetInnerHTML={{ __html: shortenedContentData }} />
-      <div>Comments ({postData.comments.length})</div>
     </div>
   );
 };
